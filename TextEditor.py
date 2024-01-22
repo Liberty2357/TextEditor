@@ -1,72 +1,111 @@
 # -*- coding: utf-8 -*-
 
 from tkinter import *
-from tkinter.filedialog import *
+from tkinter.filedialog import askopenfile, asksaveasfile
 from tkinter.messagebox import showerror
 
-filename = None
 
-def newFile():
-    global filename
-    filename = "Untitled"
-    text.delete(0.0,END)
+class TextEditor:
+    def __init__(self, root):
+        self.root = root
+        self.filename = None
 
+<<<<<<< HEAD
 
 def saveFile():
     global filename
     if filename is None:
         showerror(title="Error", message="Please use 'Save As' to specify a file path before saving.")
         return
+=======
+        self.setup_ui()
+>>>>>>> 2157501c88d5c652b32784c7de22bb06f5090823
 
-    t = text.get(0.0, END)
-    
-    try:
-        f = open(filename, 'w')
-        f.write(t)
-        f.close()
-    except Exception as e:
-        showerror(title="Oops!", message=f"Unable to save file. Error: {e}")
+    def setup_ui(self):
+        """
+        Setup the UI of the text editor
+        """
+        self.text = Text(self.root, width=400, height=400)
+        self.text.pack()
 
+<<<<<<< HEAD
     
 def saveAs():
     file = asksaveasfile(mode='w', defaultextension=".txt")
     if file is None:
         return  # �û����ȡ����ť
+=======
+        menubar = Menu(self.root)
+        filemenu = Menu(menubar)
+        filemenu.add_command(label="New", command=self.new_file)
+        filemenu.add_command(label="Open", command=self.open_file)
+        filemenu.add_command(label="Save", command=self.save_file)
+        filemenu.add_command(label="Save As", command=self.save_as)
+        filemenu.add_separator()
+        filemenu.add_command(label="Quit", command=self.root.quit)
+        menubar.add_cascade(label="File", menu=filemenu)
 
-    t = text.get(0.0, END)
-    
-    try:
-        if file.writable():
+        self.root.config(menu=menubar)
+>>>>>>> 2157501c88d5c652b32784c7de22bb06f5090823
+
+    def new_file(self):
+        self.filename = "Untitled"
+        self.text.delete(0.0, END)
+
+    def save_file(self):
+        if self.filename is None:
+            showerror(
+                title="Error",
+                message="Please use 'Save As' to specify a file path before saving.",
+            )
+            return
+
+        t = self.text.get(0.0, END)
+
+        try:
+            with open(self.filename, "w") as f:
+                f.write(t)
+        except Exception as e:
+            showerror(title="Oops!", message=f"Unable to save file. Error: {e}")
+
+    def save_as(self):
+        file = asksaveasfile(
+            mode="w",
+            defaultextension=".txt",
+            filetypes=(("Text File", "*.txt"), ("All Files", "*.*")),
+        )
+        if file is None:
+            return
+
+        t = self.text.get(0.0, END)
+
+        try:
             file.write(t.rstrip())
-        else:
-            showerror(title="Oops!", message="Unable to save file. File is not writable.")
-    except Exception as e:
-        showerror(title="Oops!", message=f"Unable to save file. Error: {e}")
+        except Exception as e:
+            showerror(title="Oops!", message=f"Unable to save file. Error: {e}")
+        finally:
+            file.close()
+
+<<<<<<< HEAD
+=======
+    def open_file(self):
+        file = askopenfile(mode="r")
+        if file is None:
+            return
+>>>>>>> 2157501c88d5c652b32784c7de22bb06f5090823
+
+        with file:
+            t = file.read()
+            self.text.delete(0.0, END)
+            self.text.insert(0.0, t)
 
 
-def openFile():
-    f = askopenfile(mode='r')
-    t = f.read()
-    text.delete(0.0,END)
-    text.insert(0.0,t)
+if __name__ == "__main__":
+    root = Tk()
+    root.title("TextEditor")
+    root.minsize(width=400, height=400)
+    root.maxsize(width=500, height=500)
 
-root = Tk()
-root.title("TextEditor")
-root.minsize(width=400,height=400)
-root.maxsize(width=500,height=500)
+    text_editor = TextEditor(root)
 
-text = Text(root,width=400,height=400)
-text.pack()
-
-menubar = Menu(root)
-filemenu = Menu(menubar)
-filemenu.add_command(label="New",command=newFile)
-filemenu.add_command(label="Open",command=openFile)
-filemenu.add_command(label="Save",command=saveFile)
-filemenu.add_command(label="Save As",command=saveAs)
-filemenu.add_separator()
-filemenu.add_command(label="Quit",command=root.quit)
-menubar.add_cascade(label="File",menu=filemenu)
-
-root.config(menu=menubar)
-root.mainloop()
+    root.mainloop()
