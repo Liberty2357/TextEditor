@@ -11,13 +11,7 @@ def newFile():
     filename = "Untitled"
     text.delete(0.0,END)
 
-# def saveFile():
-#     global filename
-#     t = text.get(0.0,END)
-#     f = open(filename,'w')
-#     f.write(t)
-#     f.close
-    
+
 def saveFile():
     global filename
     if filename is None:
@@ -33,14 +27,6 @@ def saveFile():
     except Exception as e:
         showerror(title="Oops!", message=f"Unable to save file. Error: {e}")
 
-
-# def saveAs():
-#     f = askopenfile(mode='w')
-#     t = f.read()
-#     try:
-#         f.write(t.rstrip())
-#     except:
-#         showerror(title="Oops!",message="Unnable to save file...")
     
 def saveAs():
     file = asksaveasfile(mode='w', defaultextension=".txt")
@@ -57,7 +43,6 @@ def saveAs():
     except Exception as e:
         showerror(title="Oops!", message=f"Unable to save file. Error: {e}")
 
-# ע�⣺������ʹ���� asksaveasfile������������ defaultextension=".txt" ������Ĭ���ļ���չ��Ϊ .txt
 
 def openFile():
     f = askopenfile(mode='r')
